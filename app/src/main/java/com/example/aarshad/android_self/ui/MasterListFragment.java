@@ -19,35 +19,34 @@ import com.example.aarshad.android_self.data.AndroidImageAssets;
 
 public class MasterListFragment extends Fragment {
 
-    GridView imagesGridView ;
-
     OnImageClickListener mCallBack;
 
+    // OnImageClickListener Interface, calls a method in host Activity called onImageClicked
     public interface OnImageClickListener{
-        void onImageClick( int position);
+        void onImageClicked (int position);
     }
 
+    public MasterListFragment() {
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_master_list,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_master_list,container,false);
 
-        imagesGridView = (GridView) view.findViewById(R.id.images_grid_view);
+        GridView gridView = (GridView) rootView.findViewById(R.id.images_grid_view);
 
         MasterListAdapter masterListAdapter = new MasterListAdapter(getContext(), AndroidImageAssets.getAll());
-        imagesGridView.setAdapter(masterListAdapter);
-        imagesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setAdapter(masterListAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                mCallBack.onImageClick(position);
+                mCallBack.onImageClicked(position);
             }
         });
-
-        return view;
+        return rootView;
     }
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

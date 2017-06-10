@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,15 @@ import java.util.List;
 
 public class BodyPartFragment extends Fragment {
 
+
+    public static final String TAG = "BodyPartFragment" ;
+    private List<Integer> mImageIds ;
+    private int mListIndex ;
     public static final String KEY_IMAGE_IDS_LIST = "image_ids_list";
     public static final String KEY_LIST_INDEX = "list_index";
 
-    List<Integer> mImageIds;
-    int mListIndex;
-    ImageView imageView;
+    public BodyPartFragment(){
+    }
 
     @Nullable
     @Override
@@ -35,28 +39,37 @@ public class BodyPartFragment extends Fragment {
             mImageIds = savedInstanceState.getIntegerArrayList(KEY_IMAGE_IDS_LIST);
             mListIndex = savedInstanceState.getInt(KEY_LIST_INDEX);
         }
+        View rootView = inflater.inflate(R.layout.fragment_body_part, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_body_part,container,false);
-        imageView = (ImageView) view.findViewById(R.id.imageBodyPart);
-        if (mImageIds!=null) {
+        final ImageView imageView = (ImageView) rootView.findViewById(R.id.imageBodyPart);
+
+        if (mImageIds != null){
             imageView.setImageResource(mImageIds.get(mListIndex));
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (mListIndex < mImageIds.size()-1){
+                        mListIndex++;
+                    } else {
+                        mListIndex = 0 ;
+                    }
+                    imageView.setImageResource(mImageIds.get(mListIndex));
+
+                }
+            });
+
+        } else {
+            Log.v(TAG, "This Fragment has list of null ImageIds ");
         }
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListIndex++;
-                imageView.setImageResource(mImageIds.get(mListIndex));
-            }
-        });
-
-            return view;
+        return rootView;
     }
 
-    public void setImageIds (List<Integer> imageIds){
-        mImageIds = imageIds;
+    public void setImageIds(List<Integer> imageIds){
+        mImageIds = imageIds ;
     }
-    public void setIndex (int index){
+    public void setListIndex(int index){
         mListIndex = index;
     }
 
@@ -65,4 +78,6 @@ public class BodyPartFragment extends Fragment {
         bundle.putIntegerArrayList(KEY_IMAGE_IDS_LIST, (ArrayList<Integer>) mImageIds);
         bundle.putInt(KEY_LIST_INDEX,mListIndex);
     }
+
+
 }

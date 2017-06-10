@@ -12,15 +12,25 @@ import java.util.List;
  * Created by aarshad on 6/8/17.
  */
 
+// Custom adapter class that displays a list of Android-Me images in a GridView
 public class MasterListAdapter extends BaseAdapter {
 
-    Context mContext;
-    List<Integer> mImageIds ;
+    // Keeps track of the context and list of images to display
+    private Context mContext;
+    private List<Integer> mImageIds;
 
-    public MasterListAdapter(Context context, List<Integer> imageIds){
+    /**
+     * Constructor method
+     * @param imageIds The list of images to display
+     */
+    public MasterListAdapter(Context context, List<Integer> imageIds) {
         mContext = context;
         mImageIds = imageIds;
     }
+
+    /**
+     * Returns the number of items the adapter will display
+     */
     @Override
     public int getCount() {
         return mImageIds.size();
@@ -36,21 +46,25 @@ public class MasterListAdapter extends BaseAdapter {
         return 0;
     }
 
-    @Override
-    public View getView(final int position, View view, ViewGroup viewGroup) {
+    /**
+     * Creates a new ImageView for each item referenced by the adapter
+     */
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ImageView imageView;
-        // Check if the View is regenerated or new
-        if (view == null){
+        if (convertView == null) {
+            // If the view is not recycled, this creates a new ImageView to hold an image
             imageView = new ImageView(mContext);
+            // Define the layout parameters
             imageView.setAdjustViewBounds(true);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8,8,8,8);
+            imageView.setPadding(8, 8, 8, 8);
         } else {
-            imageView = (ImageView) view;
+            imageView = (ImageView) convertView;
         }
 
+        // Set the image resource and return the newly created ImageView
         imageView.setImageResource(mImageIds.get(position));
-
         return imageView;
     }
+
 }

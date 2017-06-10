@@ -1,5 +1,6 @@
 package com.example.aarshad.android_self.ui;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -25,29 +26,31 @@ public class AndroidMeActivity extends AppCompatActivity {
             legIndex = extras.getInt("legIndex");
         }
 
-        if (savedInstanceState==null){
-
+        // Only create new fragments when there is no previously saved state
+        if (savedInstanceState == null) {
             BodyPartFragment headFragment = new BodyPartFragment();
-            headFragment.setImageIds(AndroidImageAssets.getAll());
-            headFragment.setIndex(headIndex);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.head_fragment,headFragment)
+            headFragment.setImageIds(AndroidImageAssets.getHeads());
+            headFragment.setListIndex(headIndex);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.head_container, headFragment)
                     .commit();
 
             BodyPartFragment bodyFragment = new BodyPartFragment();
-            bodyFragment.setImageIds(AndroidImageAssets.getAll());
-            bodyFragment.setIndex(bodyIndex);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.body_fragment,bodyFragment)
+            bodyFragment.setImageIds(AndroidImageAssets.getBodies());
+            bodyFragment.setListIndex(bodyIndex);
+            fragmentManager.beginTransaction()
+                    .add(R.id.body_container, bodyFragment)
                     .commit();
 
             BodyPartFragment legFragment = new BodyPartFragment();
-            legFragment.setImageIds(AndroidImageAssets.getAll());
-            legFragment.setIndex(legIndex);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.leg_fragment,legFragment)
+            legFragment.setListIndex(legIndex);
+            legFragment.setImageIds(AndroidImageAssets.getLegs());
+            fragmentManager.beginTransaction()
+                    .add(R.id.leg_container, legFragment)
                     .commit();
-
         }
+
     }
 }
